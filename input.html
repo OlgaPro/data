@@ -1,0 +1,88 @@
+﻿<html>
+<body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+
+<div ng-app="myApp" ng-controller="cntrl">
+<form action="input.html" method="post" >
+
+	Марка авто:
+				<select name="name" ng-model="name">
+					<option></option>
+					 <option value="BMW">BMW</option>
+					 <option value="Mers">Mers</option>
+				</select>
+
+	Колір:<select name="id" ng-model="id" ng-disabled="obj.idisable">
+					<option></option>
+					 <option value="1">зелений</option>
+					 <option value="2">червоний</option>
+				</select>
+
+	<input type="button" value="submit" name="btn" ng-click="insertdata()" >
+</form>
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Roll No</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="student in data">
+			<td>{{student.id}}</td>
+			<td>{{student.name_n}}</td>
+			<td>{{subject.subj}}</td>
+			<td><button ng-click="deleteStud(student.id);">Delete</button></td>
+			<td><button ng-click="editStud(student.id_d, student.name_n);">Edit</button></td>
+		</tr>
+
+	</tbody>
+</table>
+</div>
+<script>
+	var app = angular.module('myApp',[]);
+	app.controller('cntrl',function($scope,$http){
+
+		$scope.obj={'idisable':false};
+
+		$scope.insertdata=function(){
+			$http.post(
+				'insert.php',
+					{'id':$scope.id, 'name':$scope.name})
+					.success(function(){
+						$scope.msg="data ins";
+						$scope.id = null;
+						$scope.name = null;
+
+						$scope.displayStud();
+					})
+		}
+
+		$scope.displayStud=function(){
+			$http.get("select.php")
+			.success(function(data){
+				$scope.data=data
+			})
+		}
+
+		$scope.deleteStud=function(id){
+			$http.post("delete.php",{'id':id})
+			.success(function(){
+				$scope.msg="Data delection";
+				$scope.displayStud();
+			})
+		}
+
+		$scope.editStud=function(id_d, name_n){
+			$scope.id=id_d;
+			$scope.name=name_n;
+			$scope.obj.idisable=true;
+		}
+	});
+</script>
+
+
+
+</body>
+</html>

@@ -5,4 +5,5 @@
 	define("DATABASE","studentik");
 
 	$dbconnect=new mysqli(HOSTNAME,USERNAME,PASSWORD,DATABASE) or die ("Unable to connect DB");
+	
 ?>
